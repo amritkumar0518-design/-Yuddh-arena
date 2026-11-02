@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YUDDH ARENA ADMIN</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#090909;color:white;font-family:Arial}
+h1{color:#f22;letter-spacing:2px}
+p{color:#aaa}
+.card{background:#191919;border:1px solid #444;border-radius:14px;padding:16px;margin:14px 0}
+input,select{width:100%;padding:13px;margin:8px 0;background:#292929;color:white;border:1px solid #555;border-radius:8px}
+button{background:#e22;color:white;border:0;border-radius:9px;padding:12px;font-weight:bold}
+.match{padding:12px;background:#292929;border-radius:9px;margin-top:10px}
+</style>
+</head>
+<body>
+<h1>YUDDH ARENA</h1>
+<p>OWNER ADMIN PANEL</p>
+
+<div class="card">
+<h3>Create Tournament</h3>
+<input id="name" placeholder="Tournament name">
+<select id="mode">
+<option>BR Survival</option>
+<option>BR Per Kill Matches</option>
+<option>Clash Squad 1v1</option>
+<option>Lone Wolf 1v1</option>
+<option>Clash Squad 4v4</option>
+<option>Lone Wolf 2v2</option>
+<option>CS Headshot</option>
+<option>Only UMP 1v1</option>
+<option>CS Challenges</option>
+<option>Free Matches</option>
+</select>
+<select id="fee">
+<option value="0">Free Entry</option>
+<option value="10">₹10 Entry</option>
+<option value="20">₹20 Entry</option>
+<option value="30">₹30 Entry</option>
+</select>
+<input id="date" type="date">
+<input id="time" type="time">
+<input id="slots" type="number" placeholder="Total player slots">
+<button onclick="createMatch()">Create Match</button>
+</div>
+
+<div class="card">
+<h3>Created Tournaments</h3>
+<div id="matches">No tournaments created yet.</div>
+</div>
+
+<script>
+function createMatch(){
+let name=document.getElementById('name').value.trim();
+let mode=document.getElementById('mode').value;
+let fee=document.getElementById('fee').value;
+let date=document.getElementById('date').value;
+let time=document.getElementById('time').value;
+let slots=document.getElementById('slots').value;
+if(!name||!date||!time||!slots){alert('Please fill all details');return;}
+let item={name,mode,fee,date,time,slots};
+let list=JSON.parse(localStorage.getItem('ya_admin_matches')||'[]');
+list.push(item);
+localStorage.setItem('ya_admin_matches',JSON.stringify(list));
+render();
+}
+function render(){
+let list=JSON.parse(localStorage.getItem('ya_admin_matches')||'[]');
+document.getElementById('matches').innerHTML=list.length?list.map(m=>`<div class="match"><b>${m.name}</b><p>${m.mode} | Entry ₹${m.fee}</p><p>${m.date} at ${m.time} | Slots: ${m.slots}</p></div>`).join(''):'No tournaments created yet.';
+}
+render();
+</script>
+</body>
+</html>
